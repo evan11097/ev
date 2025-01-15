@@ -1,0 +1,31 @@
+!wget -q --show-progress "https://storage.googleapis.com/inspirit-ai-data-bucket-1/Data/AI%20Scholars/Sessions%201%20-%205/Session%202b%20-%20Logistic%20Regression/cancer.csv"
+
+import os             
+import numpy as np   
+import pandas as pd  
+from sklearn.metrics import accuracy_score 
+data_path = 'cancer.csv'
+dataframe = pd.read_csv(data_path)
+
+dataframe['diagnosis_cat'] = dataframe['diagnosis'].astype('category').map({1: '1 (malignant)', 0: '0 (benign)'})
+
+data_path = 'cancer.csv'
+
+dataframe = pd.read_csv(data_path)
+dataframe = dataframe[['diagnosis', 'perimeter_mean', 'radius_mean', 'texture_mean', 'area_mean', 'smoothness_mean', 'concavity_mean', 'symmetry_mean']]
+
+dataframe['diagnosis_cat'] = dataframe['diagnosis'].astype('category').map({1: '1 (malignant)', 0: '0 (benign)'})
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn import linear_model
+
+X,y = dataframe[['radius_mean']], dataframe[['diagnosis']]
+
+model = linear_model.LinearRegression()
+model.fit(X, y)
+preds = model.predict(X)
+
+sns.scatterplot(x='radius_mean', y='diagnosis', data=dataframe)
+plt.plot(X, preds, color='r')
+plt.legend([ 'Data', 'Linear Regression Fit'])
